@@ -89,10 +89,3 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-## Над проектом работали:
-
-[Артур Тополян](https://github.com/ArturTopalyan)
-
-[Антон Булыгин](https://github.com/anton12ru)
-
-[Лев]()
