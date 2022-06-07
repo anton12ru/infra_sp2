@@ -13,9 +13,9 @@ services:
       - /var/lib/postgresql/data/
     # адрес файла, где хранятся переменные окружения
     env_file:
-      - D:\Dev\infra_sp2\infra\.env
+      - ./.env
   web:
-    build: D:\Dev\infra_sp2\api_yamdb
+    build: ../api_yamdb
     restart: always
     volumes:
       # Контейнер web будет работать с данными, хранящиеся в томе static_value, 
@@ -28,7 +28,7 @@ services:
     depends_on:
       - db
     env_file:
-      - D:\Dev\infra_sp2\infra\.env
+      - ./.env
 
   # Новый контейнер
   nginx:
@@ -42,7 +42,7 @@ services:
     volumes:
       # When building, copy the created nginx config from the source directory
       # to a container and save it to a directory /etc/nginx/conf.d/
-      - D:\Dev\infra_sp2\infra\nginx\default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
 
       # The nginx container will work with data stored in the static_value volume, 
       # through your directory /var/html/static/

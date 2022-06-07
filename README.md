@@ -36,63 +36,86 @@
 Сервис YaMDB отправляет письмо с кодом подтверждения (confirmation_code) на указанный адрес email.
 Пользователь отправляет POST-запрос с параметрами username и confirmation_code на эндпоинт /api/v1/auth/token/, в ответе на запрос ему приходит token (JWT-токен).
 В результате пользователь получает токен и может работать с API проекта, отправляя этот токен с каждым запросом.
-После регистрации и получения токена пользователь может отправить PATCH-запрос на эндпоинт /api/v1/users/me/ и заполнить поля в своём профайле (описание полей — в документации).
+После регистрации и получения токена пользователь может отправить PATCH-запрос на эндпоинт /api/v1/users/me/ и заполнить поля в своём профайле (описание полей — в документации **[REDOC](http://localhost/redoc/)**).
 Если пользователя создаёт администратор, например, через POST-запрос на эндпоинт api/v1/users/ — письмо с кодом отправлять не нужно (описание полей запроса для этого случая — в документации).
 
 ---
 
 ## Технологии в проекте
 - **Python 3.7.9**
+- **Django 2.2.28**
 - **Django Framework**
 - **Django Rest Framework**
 - **Django Rest Framework Simplejwt**
 
 ---
 
-## Процедура запуска проекта
+## Процедура запуска проекта (Данный проект не подойдет для запуска в dev-режиме)
 
 1. Клонировать репозиторий и перейти в него в командной строке
 ``` 
-git clone https://github.com/ArturTopalyan/api_yamdb.git
+git clone git@github.com:anton12ru/infra_sp2.git
 cd api_yamdb
 ```
 
-2. Cоздать и активировать виртуальное окружение
+2. Cоздать в директории ```infra/``` файл ```.env``` и наполнить его следующей информацией.
 ```
-python3 -m venv venv
-source venv/Scripts/activate
+#DataBase
+DB_ENGINE=django.db.backends.postgresql <указываем, что работаем с postgresql>
+DB_NAME=postgres # имя базы данных
+POSTGRES_USER=<ваш логин для подключения к базе данных>
+POSTGRES_PASSWORD=<ваш пароль для подключения к БД>
+DB_HOST=db <название сервиса (контейнера)>
+DB_PORT=5432 <порт для подключения к БД>
+
+
+# secret key django settings.py
+SECRET_KEY=<Ваш ключ который находится в settings.py>
+
 ```
 
-3. Обновить pip и установить зависимости из файла requirements.txt
+3. Если не установлен Docker, то обязательно скачать и установить. (Подробную информацию по установке можно найти на сайте [Docker](https://www.docker.com/)). Для создания образа и контейнеров выполните следующую команду из директории где находится файл ```docker-compose.yaml```.
 ```
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+cd infra/
+docker-compose up -d --build
+```
+Подготовка к созданию образа и запуску контейнера может занять некоторое время. Если вы выполнили правильно эти шаги, у вас должно отоброзиться подобным образом
+
+> Creating infra_db_1 ... done
+> Creating infra_web_1 ... done
+> Creating infra_nginx_1 ... done
+
+
+4. Следующие команды для выполнения миграций, и добавление статики
+```
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py collectstatic
 ```
 
-4. Перейти в директорию api_yamdb
+6. Загрузите первоночальные данные из файла ```fixtures.json``` следующей командой
 ```
-cd api_yamdb
+docker-compose exec web python manage.py loaddata fixtures.json
+```
+В первоночальных данных имеется 2 пользователя и некоторые данные для первоначального просмотра, суперюзер
+> http://localhost/admin/
+> login: admin
+> password: admin
+
+*Опционально вы можете создать суперюзера, для дальнейшей работы в проекте.
+```
+docker-compose exec web python manage.py createsuperuser
 ```
 
-5. Выполнить миграции
+7. Запустить проект, перейдите по следующей ссылке
 ```
-python manage.py migrate
+http://localhost/api/v1/
 ```
+Дополнительную информацию об эндпоинах вы можете найти из документации о проекте:
+- http://localhost/redoc/
 
-6. Создать суперпользователя
+
+8. Остановить работу Проекта. Данная команда остановит работу проекта, и удалит все контейнеры, чтобы не занимать место на диске.
 ```
-python manage.py createsuperuser
+docker-compose down -v
 ```
-
-7. Запустить проект
-```
-python manage.py runserver
-```
-
-## Над проектом работали:
-
-[Артур Тополян](https://github.com/ArturTopalyan)
-
-[Антон Булыгин](https://github.com/anton12ru)
-
-[Лев]()
