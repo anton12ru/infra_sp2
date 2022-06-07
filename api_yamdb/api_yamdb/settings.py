@@ -78,7 +78,7 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST', default="db"),
         'PORT': os.getenv('DB_PORT', default="5432")
     }
-} 
+}
 
 
 # Password validation
@@ -116,8 +116,6 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-#STATICFILES_DIRS = (os.path.join(BASE_DIR, "static/"),)
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 REST_FRAMEWORK = {
@@ -148,6 +146,6 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 FROM_EMAIL = "from@example.com"
 
-#media file
+# media file
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
