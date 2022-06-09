@@ -59,21 +59,8 @@ cd infra_sp2
 ```
 
 
-2. Cоздать в директории ```infra/``` файл ```.env``` и наполнить его следующими данными.
-```
-#DataBase
-DB_ENGINE=django.db.backends.postgresql <указываем, что работаем с postgresql>
-DB_NAME=postgres # имя базы данных
-POSTGRES_USER=<ваш логин для подключения к базе данных>
-POSTGRES_PASSWORD=<ваш пароль для подключения к БД>
-DB_HOST=db <название сервиса (контейнера)>
-DB_PORT=5432 <порт для подключения к БД>
-
-
-# secret key django settings.py
-SECRET_KEY=<Ваш ключ который находится в settings.py>
-
-```
+2. Cоздать в директории ```infra/``` файл ```.env``` и наполнить его данными.
+- Подробную инструкцию для наполнения файла ```.env``` вы можете прочитать в файле ```infra\.env.template```
 
 
 3. Если не установлен Docker, то обязательно скачать и установить. (Подробную информацию по установке можно найти на сайте [Docker](https://www.docker.com/)). Для создания образа и контейнеров выполните следующую команду из директории где находится файл ```docker-compose.yaml```.
@@ -98,7 +85,7 @@ docker-compose exec web python manage.py collectstatic
 ```
 
 
-5. Загрузите первоночальные данные из файла ```fixtures.json``` следующей командой
+5. Загрузите первоначальные данные из файла ```fixtures.json``` следующей командой
 ```
 docker-compose exec web python manage.py loaddata fixtures.json
 ```
